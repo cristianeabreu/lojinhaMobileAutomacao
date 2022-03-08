@@ -35,7 +35,7 @@ public class ProdutoTest {
     @DisplayName("Validação do Valor de Produto Não Permitido")
     @Test
     public void testValidacaoDoValorDeProdutoNaoPermitido() {
-        //Fazer login e cadastrar produto com valor não permitido - Instanciar classes BaseTela / LoginTela / ListaDeProdutosTela / FormulárioDeAdiçãoDeProdutosTela
+        // Fazer login e cadastrar produto com valor não permitido - Instanciar classes BaseTela / LoginTela / ListaDeProdutosTela / FormulárioDeAdiçãoDeProdutosTela
         String mensagemApresentada = new LoginTela(app)
                 .informarUsuario("admin")
                 .informarSenha("admin")
