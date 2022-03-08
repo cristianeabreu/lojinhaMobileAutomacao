@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import telas.LoginTela;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,29 +35,18 @@ public class ProdutoTest {
     @DisplayName("Validação do Valor de Produto Não Permitido")
     @Test
     public void testValidacaoDoValorDeProdutoNaoPermitido() {
-        // Fazer Login
-        app.findElement(By.id("com.lojinha:id/user")).click();
-        app.findElement(By.id("com.lojinha:id/user")).findElement(By.id("com.lojinha:id/editText")).sendKeys("admin");
-        app.findElement(By.id("com.lojinha:id/password")).click();
-        app.findElement(By.id("com.lojinha:id/password")).findElement(By.id("com.lojinha:id/editText")).sendKeys("admin");
+        //Fazer login e cadastrar produto com valor não permitido - Instanciar classes BaseTela / LoginTela / ListaDeProdutosTela / FormulárioDeAdiçãoDeProdutosTela
+        String mensagemApresentada = new LoginTela(app)
+                .informarUsuario("admin")
+                .informarSenha("admin")
+                .submeterFormularioDeLogin()
+                .acessarFormularioAdicaoNovoProduto()
+                .informarNomeDoProduto("iPhone 13")
+                .informarValorDoProduto("700001")
+                .informarCoresDoProduto("Roxo, Verde, Azul")
+                .submeterFormularioDeAdicaoComErro()
+                .capturarMensagemApresentada();
 
-        app.findElement(By.id("com.lojinha:id/loginButton")).click();
-
-        // Abrir formulário de novo produto
-        app.findElement(By.id("com.lojinha:id/floatingActionButton")).click();
-
-        // Cadastrar um produto com valor inválido
-        app.findElement(By.id("com.lojinha:id/productName")).click();
-        app.findElement(By.id("com.lojinha:id/productName")).findElement(By.id("com.lojinha:id/editText")).sendKeys("Playstation 64");
-        app.findElement(By.id("com.lojinha:id/productValue")).click();
-        app.findElement(By.id("com.lojinha:id/productValue")).findElement(By.id("com.lojinha:id/editText")).sendKeys("700001");
-        app.findElement(By.id("com.lojinha:id/productColors")).click();
-        app.findElement(By.id("com.lojinha:id/productColors")).findElement(By.id("com.lojinha:id/editText")).sendKeys("Branco, Verde, Azul, Cinza");
-
-        app.findElement(By.id("com.lojinha:id/saveButton")).click();
-
-        // Validar que a mensagem de valor inválido foi apresentada
-        String mensagemApresentada = app.findElement(By.xpath("//android.widget.Toast")).getText();
         Assertions.assertEquals("O valor do produto deve estar entre R$ 0,01 e R$ 7.000,00", mensagemApresentada);
 
     }
@@ -64,29 +54,18 @@ public class ProdutoTest {
     @DisplayName("Validação de Produto Cadastrado com Sucesso")
     @Test
     public void testValidacaoDeProdutoCadastradoComSucesso() {
-        // Fazer Login
-        app.findElement(By.id("com.lojinha:id/user")).click();
-        app.findElement(By.id("com.lojinha:id/user")).findElement(By.id("com.lojinha:id/editText")).sendKeys("admin");
-        app.findElement(By.id("com.lojinha:id/password")).click();
-        app.findElement(By.id("com.lojinha:id/password")).findElement(By.id("com.lojinha:id/editText")).sendKeys("admin");
+        // Fazer login e cadastrar um produto com sucesso
+        String mensagemApresentada = new LoginTela(app)
+                .informarUsuario("admin")
+                .informarSenha("admin")
+                .submeterFormularioDeLogin()
+                .acessarFormularioAdicaoNovoProduto()
+                .informarNomeDoProduto("iPhone 13")
+                .informarValorDoProduto("700000")
+                .informarCoresDoProduto("Roxo, Verde, Azul")
+                .submeterFormularioDeAdicaoComSucesso()
+                .capturarMensagemApresentada();
 
-        app.findElement(By.id("com.lojinha:id/loginButton")).click();
-
-        // Abrir formulário de novo produto
-        app.findElement(By.id("com.lojinha:id/floatingActionButton")).click();
-
-        // Cadastrar um produto com valor válido
-        app.findElement(By.id("com.lojinha:id/productName")).click();
-        app.findElement(By.id("com.lojinha:id/productName")).findElement(By.id("com.lojinha:id/editText")).sendKeys("Playstation 64");
-        app.findElement(By.id("com.lojinha:id/productValue")).click();
-        app.findElement(By.id("com.lojinha:id/productValue")).findElement(By.id("com.lojinha:id/editText")).sendKeys("99900");
-        app.findElement(By.id("com.lojinha:id/productColors")).click();
-        app.findElement(By.id("com.lojinha:id/productColors")).findElement(By.id("com.lojinha:id/editText")).sendKeys("Branco, Verde");
-
-        app.findElement(By.id("com.lojinha:id/saveButton")).click();
-
-        // Validar que a mensagem de sucesso foi apresentada
-        String mensagemApresentada = app.findElement(By.xpath("//android.widget.Toast")).getText();
         Assertions.assertEquals("Produto adicionado com sucesso", mensagemApresentada);
 
     }
